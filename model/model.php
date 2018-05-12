@@ -6,6 +6,7 @@ class Model{
 
 private	$monDao;
 
+
 //---------------------------------------------------------------------
 function __construct()
 	{
@@ -23,8 +24,18 @@ function getAllByVille($ville)
 	}
 //---------------------------------------------------------------------
 
+//---------------------------------------------------------------------
+function VerifConnec()
+{
+	return $this->monDao->VerifConnec();
+}
 
-
+//---------------------------------------------------------------------
+function getAllAmdin()
+{
+	return $this->monDao->getAllAdmin();
+}
+//---------------------------------------------------------------------
 
 //---------------------------------------------------------------------
 function getAllByBudget($budget)
@@ -72,9 +83,9 @@ function Modif($personne,$ville,$budget,$genre,$ide)
 //	return $this->monDao->Supp($ide);
 //	}
 
-function Insert($personne,$ville,$budget,$genre)
+function Insert($personne,$genre,$ville,$budget,$superficie)
 	{
-	return $this->monDao->Insert($personne,$ville,$budget,$genre);
+	return $this->monDao->Insert($personne,$genre,$ville,$budget,$superficie);
 	}
 
 

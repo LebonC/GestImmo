@@ -25,8 +25,45 @@ switch($cas)
   case "accueil":
     $maVue->afficheAccueil(); 
     break;
+  case "Connexion":
+  session_start();
+    if(isset($_SESSION['nom_utilisateur']))
+    {
+      $maVue->afficheMess('Déjà connecté');
+    }
+    else
+    {
+      $maVue->afficheConnexion();
+    }
+    
+    break;
+  case "Deconnexion":
+    session_start();
+    session_unset();
+    session_destroy();
+    $maVue->afficheMess('Deconnecter');
+    break;
+  case "VerifConnec":
+    if($t=$maquette->VerifConnec())
+    {
+      $maVue->afficheAccueil();
+    }
+    else
+    {
+      $maVue->afficheConnexion();
+    }
+    break;
   case "Modification":
-    $maVue->afficheModification();
+    session_start();
+    if(isset($_SESSION['nom_utilisateur']))
+    {
+      $maVue->afficheModification();
+    }
+    else
+    {
+      $maVue->afficheConnexion();
+    }
+
     break;
   case "ConsultSpe":
     $maVue->afficheConsultSpe();
@@ -36,7 +73,7 @@ switch($cas)
     $maVue->afficheTab($t,100); 
       break;
   case "personne":
-    $t=$maquette->getAllOrderBy("idPersonne");
+    $t=$maquette->getAllOrderBy("prenom");
     $maVue->afficheTab($t,100); 
     break;
   case "ville":
@@ -128,7 +165,7 @@ switch($cas)
     if (!(empty($personne)||empty($ville)||empty($budget)||empty($genre)))
     {
 
-      $t=$maquette->Insert($personne,$ville,$budget,$genre);
+      $t=$maquette->Insert($personne,$genre,$ville,$budget,$superficie);
       $maVue->afficheMess('Insérsion effectuer');
 
       // $requete="INSERT INTO demande (personne,ville,budget,genre,superficie) 
@@ -138,7 +175,12 @@ switch($cas)
     } 
     else 
     {
-      $maVue->afficheMess('Paramètre manquant');
+      echo $personne;
+      echo $ville;
+      echo $budget;
+      echo $genre;
+      echo $superficie;
+      //$maVue->afficheMess('Paramètre manquant');
     }
     break;
 

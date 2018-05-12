@@ -18,6 +18,12 @@ function controle(formulaire, var1, var2) {
     }
     if (erreur == 0) formulaire.submit();
 }
+
+//-------------------------------------------
+//function Connexion()
+//{
+
+//}
 //-------------------------------------------
 
 jQuery(document).ready(function() {

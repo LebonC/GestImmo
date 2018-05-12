@@ -30,7 +30,21 @@
       </li>      
       <li><a href=./controller.php?cas=ConsultSpe>Consultation Spécifique</a></li>
       <li><a href=./controller.php?cas=Modification>Modification</a></li>
-      <li><a href="#">Connexion</a></li>
+      <?php
+      @session_start();
+      if (isset($_SESSION['nom_utilisateur']))
+      {
+        ?>
+        <li><a href=./controller.php?cas=Deconnexion>Deconnexion</a></li>
+        <?php 
+      }
+      else
+      {
+        ?>
+        <li><a href=./controller.php?cas=Connexion>Connexion</a></li>
+      <?php 
+      }
+      ?>
     </ul>
   </div>
 </nav>

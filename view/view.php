@@ -61,7 +61,7 @@ class Vue
 			<table  class=cadre width=60%  >
 			<tr ><td align=center>
 			<form name= formulaire action=./controller.php  method=post target=controller> 
-			id:<input type=text size=10 name=personne value=$t->idPersonne>
+			prenom :<input type=text size=10 name=personne value=$t->prenom>
 			ville:<input type=text size=30 name=ville value=$t->ville>
 			budget:<input type=number size=10 name=budget value=$t->budget>
 			genre:<input type=text size=12 name=genre value=$t->genre>
@@ -184,6 +184,37 @@ class Vue
 		include "../inc/footer.inc.php";
 	}
 
+	function afficheConnexion()
+	{
+		
+		echo'
+<html>
+    <head>
+       <meta charset="utf-8">
+        <!-- importer le fichier de style -->
+        <link rel="stylesheet" href="../asset/Connec.css" media="screen" type="text/css" />
+    </head>
+    <body>
+        <div id="container">
+            <!-- zone de connexion -->
+            
+            <form action=./controller.php?cas=VerifConnec method="POST">
+                <h1>Connexion</h1>
+                
+                <label><b>Nom utilisateur</b></label>
+                <input type="text" placeholder="Entrer nom utilisateur" name="username" required>
+
+                <label><b>Mot de passe</b></label>
+                <input type="password" placeholder="Entrer le mot de passe" name="password" required>
+
+                <input type="submit" id="submit" value="LOGIN" >
+            </form>
+        </div>
+    </body>
+</html>
+';
+	}
+
 	//----------------------------------------------
 	function afficheMess($t)
 	{
@@ -206,8 +237,8 @@ class Vue
 		echo " 
 			<table  class=cadre width=60%  >
 			<tr ><td align=center>
-			<form name= formulaire action=./controller.php  method=post target=controller> 
-			Prenom:<input type=text size=30 name=ville value=>
+			<form name= formulaire action=./controller.php?cas=nouveau  method=post target=controller> 
+			Prenom:<input type=text size=30 name=personne value=>
 			ville:<input type=text size=30 name=ville value=>
 			budget:<input type=number size=10 name=budget value=>
 			genre:<input type=text size=12 name=genre value=>

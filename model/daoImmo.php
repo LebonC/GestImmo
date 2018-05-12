@@ -12,10 +12,35 @@ class DaoImmo extends MyPDO
 	parent::__construct('mysql:host='.$serveur.';dbname='.$mabase,$login, $motdepasse);
     } // fin constructeur
 //---------------------------------------------------------------------
+    
+	  function getAllAdmin()
+	  {
+		return $this->query("SELECT * FROM admin");
+	  }
+//---------------------------------------------------------------------
+	  function VerifConnec()
+    {
+    	$username = $_POST['username'];
+    	$password = $_POST['password'];
+    	$admin = $this->getAllAdmin();
+    	while ($result = $admin->fetch(PDO::FETCH_ASSOC))
+    	{
+    		if ($result["nom_utilisateur"] == $username && $result["mdp"] == $password) 
+    		{
+    			session_start();
+    			$_SESSION['nom_utilisateur'] = $result['nom_utilisateur'];
+    			$_SESSION['mdp'] = $result['mdp'];
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+
+//---------------------------------------------------------------------
   function getAllOrderBy($ordre)
 	{ 
 	//echo "Ordre : ".$ordre."<br>";
-	$strSQL = "SELECT idDemande, idPersonne, genre, ville, budget, superficie FROM demande order by ".$ordre;
+	$strSQL = "SELECT idDemande, prenom, genre, ville, budget, superficie FROM demande d, personne p WHERE d.idPersonne=p.idPersonne order by ".$ordre;
 	$getAllOrderBy=$this->prepare($strSQL);
 	$getAllOrderBy->execute();
 	$t=$getAllOrderBy->fetchAll(PDO::FETCH_OBJ);
@@ -112,10 +137,23 @@ class DaoImmo extends MyPDO
 	//$SuppIdP=$this->prepare("DELETE FROM demande WHERE idDemande= ?");
 	//$SuppIdP->execute(array($ide));
 	//}
-function Insert($personne,$ville,$budget,$genre)
+function Insert($personne,$genre,$ville,$budget,$superficie)
 	{
-	$Insert=$this->prepare("INSERT INTO demande (isDemande, idPersonne, genre, ville, budget, superficie) VALUES ('', '', '?', '?', '?', '?')");
-	$Insert->execute(array($personne,$ville,$budget,$genre));	
+		
+		$Resultat=$this->query("SELECT * FROM personne WHERE prenom = '$personne'")->fetchAll(PDO::FETCH_ASSOC);
+		if(isset($Resultat[0]))
+		{
+			$id=$Resultat[0]['idPersonne'];
+			$MaxId2=$this->query("SELECT MAX(idDemande) FROM demande")->fetchAll(PDO::FETCH_NUM)[0][0]+1;
+			$this->query("INSERT INTO demande (idDemande, idPersonne, genre, ville, budget, superficie) VALUES ($MaxId2, $id, '$genre', '$ville', $budget, $superficie)");
+		}
+		else
+		{
+			$MaxId=$this->query("SELECT MAX(idPersonne) FROM personne")->fetchAll(PDO::FETCH_NUM)[0][0]+1;
+			$Insert2=$this->query("INSERT INTO personne (idPersonne, prenom) VALUES ($MaxId, '$personne')");
+			$MaxId2=$this->query("SELECT MAX(idDemande) FROM demande")->fetchAll(PDO::FETCH_NUM)[0][0]+1;
+			$this->query("INSERT INTO demande (idDemande, idPersonne, genre, ville, budget, superficie) VALUES ($MaxId2, $MaxId, '$genre', '$ville', $budget, $superficie)");
+		}
 	}
 
 
@@ -126,7 +164,7 @@ function Insert($personne,$ville,$budget,$genre)
 //----------------------------------------------------------------------	
 	function getAllById($id)
 	{
-	$getAllById=$this->prepare("SELECT * FROM demande WHERE idDemande = ?");
+	$getAllById=$this->prepare("SELECT * FROM demande d, personne p WHERE d.idPersonne=p.idPersonne  AND idDemande = ?");
 	$getAllById->execute(array($id));
 	$t=$getAllById->fetchAll(PDO::FETCH_OBJ);
 	return $t;
