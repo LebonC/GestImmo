@@ -79,7 +79,7 @@ class DaoImmo extends MyPDO
 //---------------------------------------------------------------------
 	function getMaxi()
 	{//http://php.net/manual/fr/pdostatement.execute.php
-	$getMaxi=$this->prepare("SELECT MAX(budget) AS Budget_Max FROM demande");
+	$getMaxi=$this->prepare("SELECT MAX(budget) AS 'Budget Maximum' FROM demande");
 	$getMaxi->execute(array());
 	$t=$getMaxi->fetchAll(PDO::FETCH_OBJ);
 	return $t;
@@ -88,7 +88,7 @@ class DaoImmo extends MyPDO
 //---------------------------------------------------------------------
 	function getMini()
 	{//http://php.net/manual/fr/pdostatement.execute.php
-	$getMini=$this->prepare("SELECT MIN(budget) AS Budget_Minim FROM demande");
+	$getMini=$this->prepare("SELECT MIN(budget) AS 'Budget Minimum' FROM demande");
 	$getMini->execute(array());
 	$t=$getMini->fetchAll(PDO::FETCH_OBJ);
 	return $t;
@@ -97,7 +97,7 @@ class DaoImmo extends MyPDO
 //---------------------------------------------------------------------
 	function getMoyen()
 	{//http://php.net/manual/fr/pdostatement.execute.php
-	$getMoyen=$this->prepare("SELECT AVG(budget) AS Moyenne_Budget FROM demande");
+	$getMoyen=$this->prepare("SELECT ROUND(AVG(budget)) AS 'Moyenne des Budgets' FROM demande");
 	$getMoyen->execute(array());
 	$t=$getMoyen->fetchAll(PDO::FETCH_OBJ);
 	return $t;
@@ -106,7 +106,7 @@ class DaoImmo extends MyPDO
 //---------------------------------------------------------------------
 	function getNombre()
 	{//http://php.net/manual/fr/pdostatement.execute.php
-	$getNombre=$this->prepare("SELECT COUNT(budget) AS Nombre_De_Biens FROM demande");
+	$getNombre=$this->prepare("SELECT COUNT(budget) AS 'Nombre De Biens' FROM demande");
 	$getNombre->execute(array());
 	$t=$getNombre->fetchAll(PDO::FETCH_OBJ);
 	return $t;
@@ -115,7 +115,7 @@ class DaoImmo extends MyPDO
 //---------------------------------------------------------------------
 	function getSupMoyenne()
 	{//http://php.net/manual/fr/pdostatement.execute.php
-	$getSupMoyenne=$this->prepare("SELECT * FROM demande WHERE budget > (SELECT AVG(budget) AS Moyenne_Budget FROM demande)");
+	$getSupMoyenne=$this->prepare("SELECT * FROM demande WHERE budget > (SELECT AVG(budget) AS 'budget superieur à la Moyenne' FROM demande)");
 	$getSupMoyenne->execute(array());
 	$t=$getSupMoyenne->fetchAll(PDO::FETCH_OBJ);
 	return $t;
